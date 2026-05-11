@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML 標籤總覽教學頁</title>
+  <title>幼兒園安全性分級網站</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
@@ -11,6 +11,13 @@
 
     {% block content %}
   <main>
+    <!-- 新增的網站標題與描述 -->
+    <header>
+      <h1>幼兒園安全性分級網站</h1>
+      <p>網站用途：從司法院全球資訊網爬取幼兒園犯罪紀錄，並進行安全性分級，提供給家長們參考。</p>
+    </header>
+    <hr>
+
     <section id="text">
       <h2>1. 文字標籤</h2>
 
@@ -246,7 +253,7 @@
   </main>
 
   <footer>
-    <p>HTML 標籤總覽頁示範完成</p>
+    <p>幼兒園安全性分級網站 - 資料僅供參考</p>
   </footer>
   {% endblock %}
 </body>
