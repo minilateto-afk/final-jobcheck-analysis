@@ -5,21 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>幼兒園安全性分級網站</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-  <style>
-    /* 僅針對主標題進行顏色修改，確保清楚易讀 */
-    .site-title {
-      color: #003366;
-    }
-  </style>
 </head>
 <body>
   {% extends "base.html" %}
 
     {% block content %}
   <main>
-    <!-- 網站標題與描述 -->
+    <!-- 網站標題與描述，已將標題顏色設定為白色 -->
     <header>
-      <h1 class="site-title">幼兒園安全性分級網站</h1>
+      <h1 style="color: white;">幼兒園安全性分級網站</h1>
       <p>網站用途：從司法院全球資訊網爬取幼兒園犯罪紀錄，並進行安全性分級，提供給家長們參考。</p>
     </header>
     <hr>
