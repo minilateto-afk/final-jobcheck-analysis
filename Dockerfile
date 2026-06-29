@@ -1,18 +1,20 @@
-# 以 Python 3.11 的輕量版映像檔作為基底
-FROM python:3.11-slim
+# 使用 Python 3.12 slim 作為基礎映像
+FROM python:3.12-slim
 
-# 把容器內的工作目錄設成 /app
-# 後面的操作都會在這個資料夾進行
+# 設定容器內工作目錄
 WORKDIR /app
 
-# 把本機的 requirements.txt 複製到容器裡
+# 複製套件需求檔
 COPY requirements.txt .
 
-# 在容器中安裝 Flask
+# 安裝 Python 套件
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 把目前專案資料夾裡的內容全部複製進容器
+# 複製整個專案到容器內
 COPY . .
 
-# 容器啟動後，自動執行 python app.py
+# 開放 Flask 預設 port
+EXPOSE 5000
+
+# 啟動 Flask 主程式
 CMD ["python", "app.py"]

@@ -1,8 +1,38 @@
-    <nav>
-        <a href="{{ url_for('home') }}">首頁</a>
-        <a href="{{ url_for('html_tags') }}">HTML 展示</a>
-    </nav>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}JobCheck{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <hr>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
 
-    {% block content %}{% endblock %}
+<body>
+    <header class="site-header">
+        <a href="{{ url_for('index') }}" class="logo">
+            <span class="logo-mark">J</span>
+            <span>JobCheck</span>
+        </a>
+
+        <nav class="nav">
+            <a href="{{ url_for('index') }}">首頁</a>
+            <a href="{{ url_for('search') }}">公司查詢</a>
+            <a href="{{ url_for('records') }}">公開紀錄</a>
+            <a href="{{ url_for('dashboard') }}">儀表板</a>
+            <a href="{{ url_for('about') }}">專案說明</a>
+        </nav>
+    </header>
+
+    <main class="page-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>
+            JobCheck 僅整理公開資料，不代表對任何事業單位之完整評價。
+            本系統資料僅供求職前參考。
+        </p>
+    </footer>
+</body>
+</html>

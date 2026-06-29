@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}專案說明｜JobCheck{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <span class="tag">Project Overview</span>
+    <h1>專案說明：JobCheck 求職公開紀錄分析系統</h1>
+
+    <p>
+        本專題以公開違反勞動法令資料為基礎，透過資料下載、資料清理、
+        PostgreSQL 儲存、Flask 查詢網站與資料視覺化，將原本較難閱讀的公告資料整理成求職者可使用的參考工具。
+    </p>
+</section>
+
+<section class="summary-grid">
+    <div class="summary-card">
+        <p>目前匯入公開紀錄</p>
+        <h2>{{ summary.total_records }}</h2>
+        <span>筆資料</span>
+    </div>
+
+    <div class="summary-card">
+        <p>事業單位數</p>
+        <h2>{{ summary.total_companies }}</h2>
+        <span>個單位</span>
+    </div>
+
+    <div class="summary-card">
+        <p>涵蓋縣市 / 主管機關</p>
+        <h2>{{ summary.total_cities }}</h2>
+        <span>個來源</span>
+    </div>
+
+    <div class="summary-card warning">
+        <p>重複出現事業單位</p>
+        <h2>{{ summary.repeated_companies }}</h2>
+        <span>個單位</span>
+    </div>
+</section>
+
+<section class="explain-panel">
+    <div class="section-heading">
+        <span class="tag">Architecture</span>
+        <h2>系統架構</h2>
+    </div>
+
+    <div class="architecture-box">
+        <div>公開資料來源</div>
+        <span>→</span>
+        <div>爬蟲下載</div>
+        <span>→</span>
+        <div>pandas 清理分類</div>
+        <span>→</span>
+        <div>PostgreSQL</div>
+        <span>→</span>
+        <div>Flask 網站</div>
+        <span>→</span>
+        <div>Render 部署</div>
+    </div>
+
+    <p>
+        系統先從公開資料來源取得資料，接著進行欄位標準化、金額清理、公司名稱整理與違規類型分類。
+        處理後的資料會匯入 PostgreSQL，Flask 網站再從資料庫讀取資料，提供查詢、列表與 dashboard。
+    </p>
+</section>
+
+<section class="explain-panel">
+    <div class="section-heading">
+        <span class="tag">Data Pipeline</span>
+        <h2>資料處理流程</h2>
+    </div>
+
+    <div class="pipeline-grid">
+        <div class="pipeline-card">
+            <span>01</span>
+            <h3>動態下載公開資料</h3>
+            <p>系統使用 requests 連線公開查詢系統，取得表單 token 後送出下載請求。</p>
+        </div>
+
+        <div class="pipeline-card">
+            <span>02</span>
+            <h3>解壓縮與格式修復</h3>
+            <p>自動解壓縮 zip，並修正 CSV 表頭位置、欄位數與中文編碼問題。</p>
+        </div>
+
+        <div class="pipeline-card">
+            <span>03</span>
+            <h3>欄位標準化</h3>
+            <p>將不同來源欄位統一整理為公告日期、公司名稱、違反法規與處分金額。</p>
+        </div>
+
+        <div class="pipeline-card">
+            <span>04</span>
+            <h3>資料清理與分類</h3>
+            <p>清理空白、拆分負責人、轉換金額，並依關鍵字分類違規類型。</p>
+        </div>
+
+        <div class="pipeline-card">
+            <span>05</span>
+            <h3>匯入 PostgreSQL</h3>
+            <p>將整理後資料匯入 Render PostgreSQL，作為網站主要資料來源。</p>
+        </div>
+
+        <div class="pipeline-card">
+            <span>06</span>
+            <h3>查詢與視覺化</h3>
+            <p>提供公司查詢、公開紀錄列表、縣市統計、類型分布與重複出現單位分析。</p>
+        </div>
+    </div>
+</section>
+
+<section class="explain-panel">
+    <div class="section-heading">
+        <span class="tag">Limitation</span>
+        <h2>系統限制與改進方向</h2>
+    </div>
+
+    <ul class="limitation-list">
+        <li>資料內容以公開公告為準，查無紀錄不代表公司完全沒有勞動爭議。</li>
+        <li>不同縣市資料欄位可能不同，因此系統需要欄位標準化與缺值處理。</li>
+        <li>本系統不建立公司黑名單，只提供中性的公開紀錄觀察標籤。</li>
+        <li>未來可加入模糊搜尋、自動排程更新、更多圖表與更細緻的法條分類規則。</li>
+    </ul>
+</section>
+{% endblock %}

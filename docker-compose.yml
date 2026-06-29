@@ -1,10 +1,10 @@
 services:
-  flask-mvp:
+  jobcheck:
     build: .
-    container_name: flask-mvp
+    container_name: jobcheck_labor_analysis
     ports:
       - "5000:5000"
     volumes:
       - .:/app
     environment:
-      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=1

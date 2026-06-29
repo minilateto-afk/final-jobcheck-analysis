@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}公開紀錄｜JobCheck{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <span class="tag">Records</span>
+    <h1>公開紀錄列表</h1>
+    <p>可依公司關鍵字、縣市與違規類型篩選目前匯入的公開紀錄。</p>
+</section>
+
+<section class="filter-panel">
+    <form class="filter-form" action="{{ url_for('records') }}" method="get">
+        <input
+            type="text"
+            name="keyword"
+            value="{{ keyword }}"
+            placeholder="公司名稱關鍵字"
+        >
+
+        <select name="city">
+            <option value="">全部縣市</option>
+            {% for item in cities %}
+            <option value="{{ item }}" {% if item == city %}selected{% endif %}>
+                {{ item }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <select name="category">
+            <option value="">全部類型</option>
+            {% for item in categories %}
+            <option value="{{ item }}" {% if item == category %}selected{% endif %}>
+                {{ item }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">套用篩選</button>
+    </form>
+
+    <p class="small-note">目前符合條件：{{ total_count }} 筆，頁面最多顯示前 200 筆。</p>
+</section>
+
+<section class="label-legend-panel">
+    <h2>公開紀錄觀察標籤</h2>
+
+    <div class="label-legend-grid">
+        <div class="legend-item">
+            <span class="record-label label-blue">查無紀錄</span>
+            <p>目前匯入資料中未查到相關公開紀錄。</p>
+        </div>
+
+        <div class="legend-item">
+            <span class="record-label label-green">單筆紀錄</span>
+            <p>同一事業單位目前有 1 筆公開紀錄。</p>
+        </div>
+
+        <div class="legend-item">
+            <span class="record-label label-yellow">多筆紀錄</span>
+            <p>同一事業單位目前有 2～4 筆公開紀錄。</p>
+        </div>
+
+        <div class="legend-item">
+            <span class="record-label label-orange">重複出現</span>
+            <p>同一事業單位目前有 5 筆以上公開紀錄。</p>
+        </div>
+    </div>
+</section>
+
+<section class="table-panel">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>觀察標籤</th>
+                    <th>公告日期</th>
+                    <th>縣市</th>
+                    <th>事業單位名稱</th>
+                    <th>同公司筆數</th>
+                    <th>違規類型</th>
+                    <th>違反法規</th>
+                    <th>法條敘述</th>
+                    <th>處分金額</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>
+                        <span class="record-label {{ record.observation_class }}">
+                            {{ record.observation_label }}
+                        </span>
+                    </td>
+                    <td>{{ record.announce_date }}</td>
+                    <td>{{ record.city }}</td>
+                    <td>{{ record.company_name }}</td>
+                    <td>{{ record.company_record_count }} 筆</td>
+                    <td>{{ record.violation_category }}</td>
+                    <td>{{ record.violated_law }}</td>
+                    <td>{{ record.violation_content }}</td>
+                    <td>{{ record.penalty_amount | money }} 元</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
