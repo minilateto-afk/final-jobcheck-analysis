@@ -5,12 +5,20 @@ import shutil
 import zipfile
 
 import requests
+import urllib3
 
 from config import DOWNLOADED_RAW_DIR, MOL_CITY_CODES
 
 
 MOL_HOME_URL = "https://announcement.mol.gov.tw/"
 MOL_DOWNLOAD_URL = "https://announcement.mol.gov.tw/Download/"
+
+# 勞動部網站的 SSL 憑證缺少 Subject Key Identifier 欄位，
+# 在新版 Python / OpenSSL 下會被判定憑證驗證失敗（即使用瀏覽器開網站完全正常）。
+# 這是該網站憑證設定本身的問題，這裡只針對這個政府公開資料網站關閉嚴格驗證，
+# 且僅用來下載公開資料，不會傳輸任何機敏資訊。
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+VERIFY_SSL = False
 
 
 def build_headers():
@@ -38,6 +46,7 @@ def fetch_csrf_token(session):
         MOL_HOME_URL,
         headers=build_headers(),
         timeout=30,
+        verify=VERIFY_SSL,
     )
 
     response.raise_for_status()
@@ -108,6 +117,7 @@ def download_single_city(city_name, city_code):
         headers=build_headers(),
         files=form_data,
         timeout=120,
+        verify=VERIFY_SSL,
     )
 
     response.raise_for_status()
